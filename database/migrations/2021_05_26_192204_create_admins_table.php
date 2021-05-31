@@ -16,6 +16,7 @@ class CreateAdminsTable extends Migration
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('surname');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
@@ -23,7 +24,7 @@ class CreateAdminsTable extends Migration
             $table->timestamps();
         });
 
-        DB::table('admins')->insert(['name'=>'Admin','email'=>'admin@gmail.com','password'=>Hash::make('Admin123')]);   //TODO
+        DB::table('admins')->insert(['name'=>'admin','surname'=>'admin','email'=>'admin@gmail.com','password'=>Hash::make('Admin123')]);   //TODO
     }
 
     /**
