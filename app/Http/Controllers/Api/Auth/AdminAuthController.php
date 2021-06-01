@@ -35,7 +35,7 @@ class AdminAuthController extends Controller
         }
 
         if (!$token = auth('api_admin')->attempt($validator->validated())) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'Bad credentials'], 401);
         }
 
         return $this->createNewToken($token);
