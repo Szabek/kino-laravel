@@ -18,6 +18,11 @@ class Category extends Model
         'name'
     ];
 
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = strtoupper($value);
+    }
+
     public function movies()
     {
         return $this->belongsToMany(Movie::class);
