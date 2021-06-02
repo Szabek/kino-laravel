@@ -7,10 +7,10 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Validator;
 
-class LoginAuthController extends Controller
+class UserAuthController extends Controller
 {
     /**
-     * Create a new LoginAuthController instance.
+     * Create a new UserAuthController instance.
      *
      * @return void
      */

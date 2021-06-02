@@ -1,10 +1,10 @@
 <?php
 
 use App\Http\Controllers\Api\AdminController;
-
 use App\Http\Controllers\Api\Auth\AdminAuthController;
-use App\Http\Controllers\Api\Auth\LoginAuthController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\Auth\UserAuthController;
+use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\MovieController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,23 +22,29 @@ use Illuminate\Support\Facades\Route;
 Route::get('/admin', [AdminController::class, 'index'])->name('admin');
 
 Route::group([
-    'prefix' => 'authUser'
+    'prefix' => 'userAuth'
 
 ], function ($router) {
-    Route::post('/login', [LoginAuthController::class, 'login']);
-    Route::post('/register', [LoginAuthController::class, 'register']);
-    Route::post('/logout', [LoginAuthController::class, 'logout']);
-    Route::post('/refresh', [LoginAuthController::class, 'refresh']);
-    Route::get('/user-profile', [LoginAuthController::class, 'userProfile']);
+    Route::post('/login', [UserAuthController::class, 'login']);
+    Route::post('/register', [UserAuthController::class, 'register']);
+    Route::post('/logout', [UserAuthController::class, 'logout']);
+    Route::post('/refresh', [UserAuthController::class, 'refresh']);
+    Route::get('/user-profile', [UserAuthController::class, 'userProfile']);
 });
 
 Route::group([
-    'prefix' => 'authAdmin'
+    'prefix' => 'adminAuth'
 
 ], function ($router) {
     Route::post('/login', [AdminAuthController::class, 'login']);
-    Route::post('/register', [AdminAuthController::class, 'register']);
     Route::post('/logout', [AdminAuthController::class, 'logout']);
     Route::post('/refresh', [AdminAuthController::class, 'refresh']);
     Route::get('/user-profile', [AdminAuthController::class, 'userProfile']);
 });
+
+Route::get('/admin', [AdminController::class, 'index'])->middleware('auth:api_admin');
+
+Route::resources([
+    'categories' => CategoryController::class,
+    'movies' => MovieController::class
+]);
