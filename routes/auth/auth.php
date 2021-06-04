@@ -30,7 +30,3 @@ Route::prefix('/user')->group(function () {
     Route::get('/user-profile', [UserAuthController::class, 'userProfile']);
 });
 
-
-
-
-
