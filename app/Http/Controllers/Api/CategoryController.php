@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryStoreRequest;
+use App\Http\Requests\CategoryUpdateRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Validator;
@@ -53,7 +54,7 @@ class CategoryController extends Controller
      * @param int $id
      * @return CategoryResource
      */
-    public function update(CategoryStoreRequest $request, Category $category)
+    public function update(CategoryUpdateRequest $request, Category $category): CategoryResource
     {
         $validated = $request->validated();
         $category->update($validated);
