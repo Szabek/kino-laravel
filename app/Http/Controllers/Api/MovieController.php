@@ -3,61 +3,60 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\MovieStoreRequest;
+use App\Http\Requests\MovieUpdateRequest;
+use App\Http\Resources\MovieResource;
+use App\Models\Movie;
+use Intervention\Image\Facades\Image;
 
 class MovieController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return MovieResource::collection(Movie::paginate(10));
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return MovieResource
      */
-    public function store(Request $request)
+    public function store(MovieStoreRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        $pictureSource = request('picture')->store('uploads', 'public');
+        $image = Image::make(public_path("storage/{$pictureSource}"))->fit(800, 1200);
+        $image->save();
+
+        $movie = Movie::create([
+            'title' => $validated['title'],
+            'category_id' => $validated['category_id'],
+            'author' => $validated['author'],
+            'description' => $validated['description'],
+            'trailer' => $validated['trailer'],
+            'release_date' => $validated['release_date'],
+            'picture_source' => $pictureSource
+        ]);
+
+        return MovieResource::make($movie);
     }
 
     /**
      * Display the specified resource.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return MovieResource
      */
-    public function show($id)
+    public function show(Movie $movie)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return MovieResource::make($movie);
     }
 
     /**
@@ -65,21 +64,26 @@ class MovieController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return MovieResource
      */
-    public function update(Request $request, $id)
+    public function update(MovieUpdateRequest $request, Movie $movie)
     {
-        //
+        $validated = $request->validated();
+        $movie->update($validated);                             //TODO: image handling
+
+        return MovieResource::make($movie);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return MovieResource
      */
-    public function destroy($id)
+    public function destroy(Movie $movie)
     {
-        //
+        $movie->delete();
+
+        return MovieResource::make($movie);
     }
 }

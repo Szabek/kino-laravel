@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\MovieController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,8 +15,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/admin', [AdminController::class, 'index'])->middleware('auth:api_admin');
-
 Route::prefix('/categories')->group(function () {
     Route::get('', [CategoryController::class, 'index']);
     Route::get('/{category}', [CategoryController::class, 'show']);
@@ -25,6 +23,17 @@ Route::prefix('/categories')->group(function () {
         Route::post('', [CategoryController::class, 'store']);
         Route::put('/{category}', [CategoryController::class, 'update']);
         Route::delete('/{category}', [CategoryController::class, 'destroy']);
+    });
+});
+
+Route::prefix('/movies')->group(function () {
+    Route::get('', [MovieController::class, 'index']);
+    Route::get('/{movie}', [MovieController::class, 'show']);
+
+    Route::middleware('auth:api_admin')->group(function () {
+        Route::post('', [MovieController::class, 'store']);
+        Route::put('/{movie}', [MovieController::class, 'update']);
+        Route::delete('/{movie}', [MovieController::class, 'destroy']);
     });
 });
 

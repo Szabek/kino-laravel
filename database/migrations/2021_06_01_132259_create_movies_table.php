@@ -18,9 +18,9 @@ class CreateMoviesTable extends Migration
             $table->string('title');
             $table->unsignedBigInteger('category_id');
             $table->string('author');
-            $table->string('description');
+            $table->longText('description');
             $table->string('trailer');
-            $table->date('release _date');
+            $table->date('release_date');
             $table->string('picture_source');
             $table->timestamps();
 

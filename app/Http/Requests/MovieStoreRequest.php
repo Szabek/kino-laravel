@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CategoryStoreRequest extends FormRequest
+class MovieStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,13 @@ class CategoryStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:categories,name',
+            'title' => 'required',
+            'category_id' => 'required|exists:categories,id',
+            'author' => 'required',
+            'description' => 'required',
+            'trailer' => 'required',
+            'release_date' => 'required',
+            'picture' => 'required|image'
         ];
     }
 }
-
