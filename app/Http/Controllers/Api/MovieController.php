@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\MovieStoreRequest;
 use App\Http\Requests\MovieUpdateRequest;
 use App\Http\Resources\MovieResource;
+use App\Models\Category;
 use App\Models\Movie;
 use Intervention\Image\Facades\Image;
 
@@ -37,13 +38,16 @@ class MovieController extends Controller
 
         $movie = Movie::create([
             'title' => $validated['title'],
-            'category_id' => $validated['category_id'],
             'author' => $validated['author'],
             'description' => $validated['description'],
             'trailer' => $validated['trailer'],
             'release_date' => $validated['release_date'],
             'picture_source' => $pictureSource
         ]);
+        $category = Category::find($validated['category_id']);
+        $movie->category->associate($category);
+
+        $movie->save();
 
         return MovieResource::make($movie);
     }

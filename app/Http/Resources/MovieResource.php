@@ -16,7 +16,7 @@ class MovieResource extends JsonResource
     {
         return [
             'title' => $this->title,
-            'category_id' => $this->category_id,
+            'category' => CategoryResource::make($this->category),
             'author' => $this->author,
             'description' => $this->description,
             'trailer' => $this->trailer,
