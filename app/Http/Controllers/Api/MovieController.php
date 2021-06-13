@@ -36,7 +36,7 @@ class MovieController extends Controller
         $image = Image::make(public_path("storage/{$pictureSource}"))->fit(800, 1200);
         $image->save();
 
-        $movie = Movie::create([
+        $movie = new Movie([
             'title' => $validated['title'],
             'author' => $validated['author'],
             'description' => $validated['description'],
@@ -45,7 +45,7 @@ class MovieController extends Controller
             'picture_source' => $pictureSource
         ]);
         $category = Category::find($validated['category_id']);
-        $movie->category->associate($category);
+        $movie->category()->associate($category);
 
         $movie->save();
 
