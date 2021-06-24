@@ -8,10 +8,18 @@ use App\Http\Requests\MovieUpdateRequest;
 use App\Http\Resources\MovieResource;
 use App\Models\Category;
 use App\Models\Movie;
-use Intervention\Image\Facades\Image;
+use App\services\PictureService;
 
 class MovieController extends Controller
 {
+
+    public $pictureService;
+
+    public function __construct(PictureService $pictureService)
+    {
+        $this->pictureService = $pictureService;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -19,32 +27,27 @@ class MovieController extends Controller
      */
     public function index()
     {
-        return MovieResource::collection(Movie::paginate(10));
+        return MovieResource::collection(Movie::paginate(12));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param MovieStoreRequest $request
      * @return MovieResource
      */
     public function store(MovieStoreRequest $request)
     {
         $validated = $request->validated();
+        $category = Category::findOrFail($validated['category_id']);
 
         $pictureSource = request('picture')->store('uploads', 'public');
-        $image = Image::make(public_path("storage/{$pictureSource}"))->fit(800, 1200);
-        $image->save();
+        $this->pictureService->resizePicture($pictureSource, 800, 1200);
 
-        $movie = new Movie([
-            'title' => $validated['title'],
-            'author' => $validated['author'],
-            'description' => $validated['description'],
-            'trailer' => $validated['trailer'],
-            'release_date' => $validated['release_date'],
+        $movie = new Movie($validated);
+        $movie->fill([
             'picture_source' => $pictureSource
         ]);
-        $category = Category::find($validated['category_id']);
         $movie->category()->associate($category);
 
         $movie->save();
@@ -55,7 +58,7 @@ class MovieController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
+     * @param \App\Models\Movie $movie
      * @return MovieResource
      */
     public function show(Movie $movie)
@@ -66,22 +69,32 @@ class MovieController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param \App\Http\Requests\MovieUpdateRequest $request
+     * @param \App\Models\Movie $movie
      * @return MovieResource
      */
     public function update(MovieUpdateRequest $request, Movie $movie)
     {
         $validated = $request->validated();
-        $movie->update($validated);                             //TODO: image handling
 
+
+        if ($request->picture) {
+            $pictureSource = request('picture')->store('uploads', 'public');
+            $this->pictureService->resizePicture($pictureSource, 800, 1200);
+            $this->pictureService->removePicture($movie->picture_source);
+            $movie->fill([
+                'picture_source' => $pictureSource
+            ]);
+        }
+
+        $movie->update($validated);
         return MovieResource::make($movie);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
+     * @param \App\Models\Movie $movie
      * @return MovieResource
      */
     public function destroy(Movie $movie)

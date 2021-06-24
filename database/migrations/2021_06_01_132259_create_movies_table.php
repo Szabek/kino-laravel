@@ -23,6 +23,7 @@ class CreateMoviesTable extends Migration
             $table->date('release_date');
             $table->string('picture_source');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->index('category_id');
         });

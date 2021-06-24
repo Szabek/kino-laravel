@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\MovieController;
+use App\Http\Controllers\Api\RoomController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,6 +37,18 @@ Route::prefix('/movies')->group(function () {
         Route::delete('/{movie}', [MovieController::class, 'destroy']);
     });
 });
+
+Route::prefix('/rooms')->group(function () {
+    Route::get('', [RoomController::class, 'index']);
+    Route::get('/{room}', [RoomController::class, 'show']);
+
+    Route::middleware('auth:api_admin')->group(function () {
+        Route::post('', [RoomController::class, 'store']);
+        Route::put('/{room}', [RoomController::class, 'update']);
+        Route::delete('/{room}', [RoomController::class, 'destroy']);
+    });
+});
+
 
 
 
