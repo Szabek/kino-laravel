@@ -24,4 +24,9 @@ class Movie extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function screenings()
+    {
+        return $this->hasMany(Screening::class)->withTrashed();
+    }
 }

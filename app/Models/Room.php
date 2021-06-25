@@ -14,4 +14,9 @@ class Room extends Model
         'name',
         'seats'
     ];
+
+    public function screenings()
+    {
+        return $this->hasMany(Screening::class)->withTrashed();
+    }
 }

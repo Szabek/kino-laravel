@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\MovieController;
 use App\Http\Controllers\Api\RoomController;
+use App\Http\Controllers\Api\ScreeningController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -46,6 +47,17 @@ Route::prefix('/rooms')->group(function () {
         Route::post('', [RoomController::class, 'store']);
         Route::put('/{room}', [RoomController::class, 'update']);
         Route::delete('/{room}', [RoomController::class, 'destroy']);
+    });
+});
+
+Route::prefix('/screenings')->group(function () {
+    Route::get('', [ScreeningController::class, 'index']);
+    Route::get('/{screening}', [ScreeningController::class, 'show']);
+
+    Route::middleware('auth:api_admin')->group(function () {
+        Route::post('', [ScreeningController::class, 'store']);
+        Route::put('/{screening}', [ScreeningController::class, 'update']);
+        Route::delete('/{screening}', [ScreeningController::class, 'destroy']);
     });
 });
 
