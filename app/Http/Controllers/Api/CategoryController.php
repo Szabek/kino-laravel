@@ -25,13 +25,12 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param \App\Http\Requests\CategoryStoreRequest $request
      * @return CategoryResource
      */
     public function store(CategoryStoreRequest $request)
     {
-        $validated = $request->validated();
-        $category = Category::create($validated);
+        $category = Category::create($request->validated());
 
         return CategoryResource::make($category);
     }
@@ -39,7 +38,7 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
+     * @param \App\Models\Category $category
      * @return CategoryResource
      */
     public function show(Category $category)
@@ -50,14 +49,13 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param \App\Http\Requests\CategoryUpdateRequest $request
+     * @param \App\Models\Category $category
      * @return CategoryResource
      */
-    public function update(CategoryUpdateRequest $request, Category $category): CategoryResource
+    public function update(CategoryUpdateRequest $request, Category $category)
     {
-        $validated = $request->validated();
-        $category->update($validated);
+        $category->update($request->validated());
 
         return CategoryResource::make($category);
     }
@@ -65,13 +63,21 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
-     * @return CategoryResource
+     * @param \App\Models\Category $category
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Category $category)
     {
-        $category->delete();
-
-        return CategoryResource::make($category);
+        if ($category->movies()->count() == 0) {
+            $category->delete();
+            return response()->json([
+                'status' => 1,
+                'message' => 'success'
+            ]);
+        }
+        return response()->json([
+            'status' => 0,
+            'message' => 'fail'
+        ]);
     }
 }

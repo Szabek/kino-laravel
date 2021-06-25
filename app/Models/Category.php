@@ -25,6 +25,6 @@ class Category extends Model
 
     public function movies()
     {
-        return $this->belongsToMany(Movie::class);
+        return $this->hasMany(Movie::class)->withTrashed();
     }
 }
