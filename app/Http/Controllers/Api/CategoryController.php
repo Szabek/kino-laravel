@@ -7,10 +7,22 @@ use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
+use App\services\CategoryDeleteService;
 use Validator;
 
 class CategoryController extends Controller
 {
+    public $categoryDeleteService;
+
+    /**
+     * CategoryController constructor.
+     * @param CategoryDeleteService $categoryDeleteService
+     */
+    public function __construct(CategoryDeleteService $categoryDeleteService)
+    {
+        $this->categoryDeleteService = $categoryDeleteService;
+    }
+
 
     /**
      * Display a listing of the resource.
@@ -68,16 +80,6 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        if ($category->movies()->count() == 0) {
-            $category->delete();
-            return response()->json([
-                'status' => 1,
-                'message' => 'success'
-            ]);
-        }
-        return response()->json([
-            'status' => 0,
-            'message' => 'fail'
-        ]);
+        return $this->categoryDeleteService->passStatus($this->categoryDeleteService->deleteCategory($category));
     }
 }
