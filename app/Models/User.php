@@ -18,6 +18,7 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $fillable = [
         'name',
+        'surname',
         'email',
         'password',
     ];
@@ -59,5 +60,10 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class)->withTrashed();
     }
 }

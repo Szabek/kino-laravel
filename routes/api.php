@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\MovieController;
+use App\Http\Controllers\Api\ReservationController;
 use App\Http\Controllers\Api\RoomController;
 use App\Http\Controllers\Api\ScreeningController;
 use Illuminate\Support\Facades\Route;
@@ -59,6 +60,17 @@ Route::prefix('/screenings')->group(function () {
         Route::put('/{screening}', [ScreeningController::class, 'update']);
         Route::delete('/{screening}', [ScreeningController::class, 'destroy']);
     });
+});
+
+Route::prefix('/reservations')->group(function () {
+    Route::get('', [ReservationController::class, 'index']);
+    Route::get('/{uuid}', [ReservationController::class, 'show']);
+
+
+        Route::post('', [ReservationController::class, 'store']);
+        Route::put('/{uuid}', [ReservationController::class, 'update']);
+        Route::delete('/{uuid}', [ReservationController::class, 'destroy']);
+
 });
 
 
