@@ -99,6 +99,7 @@ class MovieController extends Controller
      */
     public function destroy(Movie $movie)
     {
+        $this->pictureService->removePicture($movie->picture_source);
         $movie->delete();
 
         return MovieResource::make($movie);

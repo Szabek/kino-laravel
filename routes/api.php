@@ -63,14 +63,13 @@ Route::prefix('/screenings')->group(function () {
 });
 
 Route::prefix('/reservations')->group(function () {
-    Route::get('', [ReservationController::class, 'index']);
-    Route::get('/{uuid}', [ReservationController::class, 'show']);
-
-
+    Route::middleware(['auth:api_user,api_admin'])->group(function () {
+        Route::get('', [ReservationController::class, 'index']);
+        Route::get('/{uuid}', [ReservationController::class, 'show']);
         Route::post('', [ReservationController::class, 'store']);
         Route::put('/{uuid}', [ReservationController::class, 'update']);
         Route::delete('/{uuid}', [ReservationController::class, 'destroy']);
-
+    });
 });
 
 
