@@ -23,6 +23,18 @@ class ScreeningController extends Controller
     }
 
     /**
+     * Display a grouped listing of the resource.
+     *
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public function getScreeningByDate(string $date)
+    {
+        $screenings = Screening::whereDate('start_time', $date)->get();
+
+        return ScreeningResource::collection($screenings)->groupBy('movie_id');
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param ScreeningStoreRequest $request
