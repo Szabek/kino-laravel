@@ -54,6 +54,7 @@ Route::prefix('/rooms')->group(function () {
 Route::prefix('/screenings')->group(function () {
     Route::get('', [ScreeningController::class, 'index']);
     Route::get('/{screening}', [ScreeningController::class, 'show']);
+    Route::get('/date/{date}', [ScreeningController::class, 'getScreeningByDate']);
 
     Route::middleware('auth:api_admin')->group(function () {
         Route::post('', [ScreeningController::class, 'store']);
