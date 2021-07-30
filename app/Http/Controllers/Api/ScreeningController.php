@@ -29,7 +29,9 @@ class ScreeningController extends Controller
      */
     public function getScreeningByDate(string $date)
     {
-        $screenings = Screening::whereDate('start_time', $date)->get();
+        $screenings = Screening::whereDate('start_time', $date)
+            ->get()
+            ->sortBy('start_time');
 
         return ScreeningResource::collection($screenings)->groupBy('movie_id');
     }
