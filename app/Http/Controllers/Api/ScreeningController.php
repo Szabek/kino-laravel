@@ -51,6 +51,9 @@ class ScreeningController extends Controller
         $screening = new Screening($validated);
         $screening->movie()->associate($movie);
         $screening->room()->associate($room);
+        $screening->fill([
+            'available_seats' => $screening->room->seats
+        ]);
         $screening->save();
 
         return ScreeningResource::make($screening);
@@ -94,3 +97,4 @@ class ScreeningController extends Controller
         return ScreeningResource::make($screening);
     }
 }
+

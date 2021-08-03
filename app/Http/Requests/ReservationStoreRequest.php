@@ -13,7 +13,10 @@ class ReservationStoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if (auth()->user()->id == $this->user_id) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -27,8 +30,7 @@ class ReservationStoreRequest extends FormRequest
             'user_id' => 'required|exists:users,id',
             'screening_id' => 'required|exists:screenings,id',
             'seats' => 'required',
-            'total_price' => 'required',
-            'is_paid' => 'required',
         ];
     }
 }
+

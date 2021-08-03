@@ -9,7 +9,6 @@ use App\Http\Resources\ReservationResource;
 use App\Models\Reservation;
 use App\Models\Screening;
 use App\Models\User;
-use Illuminate\Http\Request;
 
 class ReservationController extends Controller
 {
@@ -38,6 +37,10 @@ class ReservationController extends Controller
         $reservation = new Reservation($validated);
         $reservation->user()->associate($user);
         $reservation->screening()->associate($screening);
+        $reservation->fill([
+            'total_price' => $screening->price * $reservation->seats,
+            'is_paid' => false
+        ]);
         $reservation->save();
 
         return ReservationResource::make($reservation);
@@ -46,7 +49,7 @@ class ReservationController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \App\Http\Resources\ReservationResource
      */
     public function show($uuid)
@@ -74,7 +77,7 @@ class ReservationController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return ReservationResource
      */
     public function destroy($uuid)
@@ -85,3 +88,4 @@ class ReservationController extends Controller
         return ReservationResource::make($reservation);
     }
 }
+

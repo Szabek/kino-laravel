@@ -19,7 +19,8 @@ class ScreeningResource extends JsonResource
             'movie' => MovieResource::make($this->movie),
             'room' => RoomResource::make($this->room),
             'start_time' => $this->start_time,
-            'price' => $this->price
+            'price' => $this->price,
+            'available_seats' => $this->available_seats
         ];
     }
 }

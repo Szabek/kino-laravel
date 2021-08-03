@@ -19,6 +19,7 @@ class CreateScreeningsTable extends Migration
             $table->unsignedBigInteger('room_id');
             $table->dateTime('start_time');
             $table->double('price');
+            $table->integer('available_seats');
             $table->timestamps();
             $table->softDeletes();
 
@@ -37,3 +38,4 @@ class CreateScreeningsTable extends Migration
         Schema::dropIfExists('screenings');
     }
 }
+

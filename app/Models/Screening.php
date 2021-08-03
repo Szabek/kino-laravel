@@ -14,7 +14,8 @@ class Screening extends Model
         'movie_id',
         'room_id',
         'start_time',
-        'price'
+        'price',
+        'available_seats'
     ];
 
     public function movie()
@@ -32,3 +33,4 @@ class Screening extends Model
         return $this->hasMany(Reservation::class)->withTrashed();
     }
 }
+
